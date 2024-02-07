@@ -70,7 +70,7 @@ app.put('/api/courses/:id', async(req, res) =>{
 app.delete('/api/courses/:id',(req,res) =>{
     const course = courses.find(c => c.id === parseInt(req.params.id));
     if(!course){
-        res.status(404).send("The course was not found");
+        return res.status(404).send("The course was not found");
     }
     const index = courses.indexOf(course);
     courses.splice(index, 1);
