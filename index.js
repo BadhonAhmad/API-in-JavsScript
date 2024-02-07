@@ -1,27 +1,30 @@
-import express from 'express';
-import bodyParser from 'body-parser'
+const express = require('express');
 const app = express();
-app.use(bodyParser.json());
+const courses = [
+    {id : 1, name : 'course1'},
+    {id : 2, name : 'course2'},
+    {id : 3, name : 'course3'}
+]
 
-const PORT = 8080;  
-import userRoutes from './routes/users.js';
+app.get('/', (req,res)=> {
+    res.send("hello badhon");
+});
 
-app.use('/users',userRoutes);
-app.listen(PORT, () => {
-    console.log(`Server started on http://localhost:${PORT}`);
-})
+app.get('/api/courses/:id', (req, res) => {
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    if (!course) {
+      // Handle the case where the course is not found
+      res.status(404).send('Course not found');
+    } else {
+      res.send(course);
+    }
+});
+  
 
-//when we enter an url they send a get request default 
-// app.get('/',(req, res) =>{
-//     console.log("hello");
-//     res.send('hello from home page');
-// });
+app.get('/api/courses/:year/:month/',(req,res)=>{
+    res.send(req.query);
+});// /api/courses/2018/1
 
-// app.post('/tshirt/:id',(req,res)=>{
-//     const {id } = req.params;
-//     const {logo} = "logoo";
-//     if(!logo){
-//         res.status(418).send({message : 'we need a logo'})
-//     }
-// })
+const port = process.env.PORT || 3000;
+app.listen(port,()=> console.log(`listening to port ${port}`));
 
