@@ -1,4 +1,6 @@
 const express = require('express');
+const {createItem, readItem, updateItem, deleteItem, readItems} = require('./crud');
+
 const app = express();
 const Joi = require('joi');
 app.use(express.json());
@@ -9,9 +11,38 @@ const courses = [
 ]
 
 
-app.get('/', (req,res)=> {
-    res.send("hello badhon");
+app.get('/items', (req,res)=> {
+    readItems((err, rows) =>{
+        if(err){
+            res.status(500).send(err.message)
+        }
+        else{
+            res.status(200).json({"name":"Badhon"});
+        }
+    })
 });
+
+app.post('/items',(req, res) =>{
+    const {name, description} = req.body
+    createItem(name , description , (err, data) =>{
+        if(err){
+            res.status(500).send(err.message);            
+        }else{
+            res.status(201).send(`Item is added ID : ${data.id}`)
+        }
+    })
+})
+
+
+
+
+
+
+
+
+
+
+
 
 
 app.get('/api/courses/:id', (req, res) => {
@@ -76,7 +107,6 @@ app.delete('/api/courses/:id',(req,res) =>{
     courses.splice(index, 1);
 
     res.send(course);
-
 });
 
 
