@@ -1,5 +1,5 @@
 const express = require('express');
-const {createItem, readItems, updateItem, deleteItem} = require('./crud');
+const {createItem, readItems, updateItem, deleteItem,getItemSingle} = require('./crud');
 
 const app = express();
 const Joi = require('joi');
@@ -16,6 +16,20 @@ app.get('/items', (req,res)=> {
         }
     })
 });
+
+app.get('/item/:id', (req, res) => {
+    const id=req.params.id;
+    getItemSingle(id,(err,rows) => {
+        if(err){
+            res.status(500).send(err.message);
+        }
+        else{
+            res.status(200).json(rows);
+        }
+    });
+});
+
+
 
 app.post('/items',(req, res) =>{
     const {name, description} = req.body
@@ -39,6 +53,8 @@ app.put('/items/:id',(req,res)=>{
         }
     })
 })
+
+
 
 app.delete('/items/:id',(req,res) =>{
     deleteItem(req.params.id,(err)=>{
