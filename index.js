@@ -1,14 +1,9 @@
 const express = require('express');
-const {createItem, readItem, updateItem, deleteItem, readItems} = require('./crud');
+const {createItem, readItems, updateItem, deleteItem} = require('./crud');
 
 const app = express();
 const Joi = require('joi');
 app.use(express.json());
-const courses = [
-    {id : 1, name : 'course1'},
-    {id : 2, name : 'course2'},
-    {id : 3, name : 'course3'}
-]
 
 
 app.get('/items', (req,res)=> {
@@ -17,7 +12,7 @@ app.get('/items', (req,res)=> {
             res.status(500).send(err.message)
         }
         else{
-            res.status(200).json({"name":"Badhon"});
+            res.status(200).json(rows);
         }
     })
 });
@@ -33,16 +28,38 @@ app.post('/items',(req, res) =>{
     })
 })
 
+app.put('/items/:id',(req,res)=>{
+    const {name, description} = req.body;
+    updateItem(req.params.id,name,description,(err)=>{
+        if(err){
+            res.status(500).send(err.message);  
+        }
+        else{
+            res.status(200).send("Item Updated");
+        }
+    })
+})
+
+app.delete('/items/:id',(req,res) =>{
+    deleteItem(req.params.id,(err)=>{
+        if(err){
+            res.status(500).send(err.message);
+        }
+        else{
+            res.status(200).send("item deleted");
+        }
+    })
+})
 
 
 
 
-
-
-
-
-
-
+///another api's
+const courses = [
+    {id : 1, name : 'course1'},
+    {id : 2, name : 'course2'},
+    {id : 3, name : 'course3'}
+]
 
 
 app.get('/api/courses/:id', (req, res) => {
