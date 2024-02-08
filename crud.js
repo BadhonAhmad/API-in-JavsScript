@@ -1,6 +1,5 @@
 const db = require('./database')
 
-//create
 const createItem = (name, description,callback) =>{
     const sql = `INSERT INTO items (name, description) VALUES(?,?)`
     db.run(sql, [name, description], function(err){
@@ -12,7 +11,6 @@ const getItemSingle = (id, callback) =>{
     const sql = `SELECT name, description FROM items WHERE id = ?`;
     db.get(sql,id,callback);
 }
-
 
 const readItems = (callback) =>{
     const sql = `SELECT * FROM items`;
@@ -29,4 +27,8 @@ const deleteItem = (id, callback) =>{
     db.run(sql, id, callback)
 }
 
-module.exports = {createItem, readItems, updateItem, deleteItem,getItemSingle}
+const itemsClear = (callback) =>{
+    const sql = `DROP TABLE items`
+    db.run(sql,callback);
+}
+module.exports = {createItem, readItems, updateItem, deleteItem,getItemSingle,itemsClear}

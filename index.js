@@ -1,10 +1,21 @@
 const express = require('express');
-const {createItem, readItems, updateItem, deleteItem,getItemSingle} = require('./crud');
+const {itemsClear,createItem, readItems, updateItem, deleteItem,getItemSingle} = require('./crud');
 
 const app = express();
 const Joi = require('joi');
 app.use(express.json());
 
+
+app.get('/itemsClear',(req,res) =>{
+    itemsClear((err) =>{
+        if(err){
+            res.status(500).send(err.message);
+        }
+        else{
+            res.status(200).send("no database");
+        }
+    })
+})
 
 app.get('/items', (req,res)=> {
     readItems((err, rows) =>{
@@ -55,7 +66,6 @@ app.put('/items/:id',(req,res)=>{
 })
 
 
-
 app.delete('/items/:id',(req,res) =>{
     deleteItem(req.params.id,(err)=>{
         if(err){
@@ -66,8 +76,6 @@ app.delete('/items/:id',(req,res) =>{
         }
     })
 })
-
-
 
 
 ///another api's
